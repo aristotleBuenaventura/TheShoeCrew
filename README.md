@@ -10,7 +10,7 @@ Vergara, Jazmine T. / BSIT Project Manager
 
 
 Table: carousel
-	Name	Type	Collation	Attributes	Null	Default	Comments	Extra	Action
+#	Name	Type	Collation	Attributes	Null	Default	Comments	Extra	Action
 	1	id  Primary	int(11)			No	None		AUTO_INCREMENT	Change Change	Drop Drop	
 
 	2	name	varchar(255)	utf8_unicode_ci		No	None			Change Change	Drop Drop	
@@ -18,7 +18,7 @@ Table: carousel
 	3	image	varchar(255)	utf8_unicode_ci		No	None			Change Change	Drop Drop	
 
 Table: cart
-	Name	Type	Collation	Attributes	Null	Default	Comments	Extra	Action
+#	Name	Type	Collation	Attributes	Null	Default	Comments	Extra	Action
 	1	id  Primary	int(11)			No	None		AUTO_INCREMENT	Change Change	Drop Drop	
 
 	2	name	varchar(255)	utf8_unicode_ci		No	None			Change Change	Drop Drop	
@@ -36,7 +36,7 @@ Table: cart
 	8	size	varchar(255)	utf8_unicode_ci		No	None			Change Change	Drop Drop	
 
 Table: inquiries
-	Name	Type	Collation	Attributes	Null	Default	Comments	Extra	Action
+#	Name	Type	Collation	Attributes	Null	Default	Comments	Extra	Action
 	1	id  Primary	int(11)			No	None		AUTO_INCREMENT	Change Change	Drop Drop	
 
 	2	name	varchar(255)	utf8_unicode_ci		No	None			Change Change	Drop Drop	
@@ -46,7 +46,7 @@ Table: inquiries
 	4	subject	varchar(255)	utf8_unicode_ci		No	None			Change Change	Drop Drop	
 
 Table: products
-	Name	Type	Collation	Attributes	Null	Default	Comments	Extra	Action
+#	Name	Type	Collation	Attributes	Null	Default	Comments	Extra	Action
 	1	id  Primary	int(11)			No	None		AUTO_INCREMENT	Change Change	Drop Drop	
 
 	2	name	varchar(255)	utf8_unicode_ci		No	None			Change Change	Drop Drop	
@@ -62,7 +62,7 @@ Table: products
 
 Table: registration
 
-	Name	Type	Collation	Attributes	Null	Default	Comments	Extra	Action
+#	Name	Type	Collation	Attributes	Null	Default	Comments	Extra	Action
 	1	id  Primary	int(11)			No	None		AUTO_INCREMENT	Change Change	Drop Drop	
 
 	2	username	varchar(255)	utf8_unicode_ci		No	None			Change Change	Drop Drop	

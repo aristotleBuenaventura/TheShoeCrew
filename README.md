@@ -1,11 +1,11 @@
 # TheShoeCrew
-To run the code in localhost, you must first create the database that we have in your xampp. 
-Developers: 
-Aquino, Justin Deniel S. / BSIT Backend Developer
-Buenaventura, Aristotle C. / BSIT Full Stack Developer/ Main Programmer
-Paulme, Miguel Angelo S. / BSIT Graphic Designer
-Ramos, Lawrence Andrew M. / BSIT Frontend Developer
-Vergara, Jazmine T. / BSIT Project Manager
+#To run the code in localhost, you must first create the database that we have in your xampp. 
+#Developers: 
+#Aquino, Justin Deniel S. / BSIT Backend Developer
+#Buenaventura, Aristotle C. / BSIT Full Stack Developer/ Main Programmer
+#Paulme, Miguel Angelo S. / BSIT Graphic Designer
+#Ramos, Lawrence Andrew M. / BSIT Frontend Developer
+#Vergara, Jazmine T. / BSIT Project Manager
 
 
 

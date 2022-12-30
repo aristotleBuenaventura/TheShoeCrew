@@ -82,7 +82,7 @@ if (isset($_GET['search'])){
                     <div class="col col-12 col-sm-12 col-md-4 mt-2 mb-2">
                         <a href="index.php"><img class="logo" src="images/logo.png"  alt="" ></a>
                     </div>
-                    <div class="col col-6 col-sm-6 col-md-4 align-self-center align-items-center mt-2 mb-3">
+                    <div class="col col-6 col-sm-6 col-md-4 align-self-center align-items-center mt-2 mb-3 bg-red">
                         <div class="input-group rounded ">
                             <input type="search" class="form-control rounded searchBar" placeholder="Search" aria-label="Search" aria-describedby="search-addon" value="<?php echo $search ?>"/>
                             <button class="border-0 rounded bg-gray searchBar px-3" onclick="search()">

@@ -25,7 +25,7 @@ if ($resultCheck > 0) {
 
 
 <!DOCTYPE html>
-<html lang="en-v2">
+<html lang="en">
 
 <head>
   <meta charset="UTF-8">

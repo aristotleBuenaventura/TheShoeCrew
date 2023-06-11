@@ -5,46 +5,105 @@ session_start();
 
 error_reporting(0);
 
-    
+use PHPMailer\PHPMailer\PHPMailer;
+use PHPMailer\PHPMailer\SMTP;
+use PHPMailer\PHPMailer\Exception;
+
+// Load Composer's autoloader
+require 'vendor/autoload.php';
 
 if (isset($_SESSION['username'])) {
     header("Location: index.php");
 }
 
 if (isset($_POST['submit'])) {
-    
     $username = $_POST['username'];
     $email = $_POST['email'];
     $firstname = $_POST['firstname'];
     $lastname = $_POST['lastname'];
     $password = md5($_POST['password']);
-    $cpassword = md5($_POST['cpassword']); 
+    $cpassword = md5($_POST['cpassword']);
     $role = "user";
 
-    
-    
     if ($password === $cpassword) {
-      $users = getUserByEmail($conn, $email);
-      if ($users->num_rows === 0) {
-        $sql = "INSERT INTO registration (username, email, firstname, lastname, password, role,address,birthday,mobileNo,gender,image,balance)
-                    VALUES ('$username', '$email', '$firstname', '$lastname','$password', '$role','','','','','loginIcon.jpeg','0')";
-            $result = mysqli_query($conn, $sql);
-            if ($result) {
-              $_SESSION["firstname"] = $firstname;
-              $_SESSION["lastname"] = $lastname;
-              $_SESSION["email"] = $email;
-                header('Location: login.php?registration=true');
-            } else {
-                echo "<script>alert('Woops! Something Went Wrong.')</script>";
-            }
-        } else {
-            echo "<script>alert('Woops! Email Already Exists.')</script>";
+        $users = getUserByEmail($conn, $email);
+        if ($users->num_rows === 0) {
+            // Instantiate PHPMailer
+            $mail = new PHPMailer(true);
 
+            try {
+                // Enable verbose debug output
+                $mail->SMTPDebug = 0;
+
+                // Send using SMTP
+                $mail->isSMTP();
+
+                // Set the SMTP server to send through
+                $mail->Host = 'smtp.gmail.com';
+
+                // Enable SMTP authentication
+                $mail->SMTPAuth = true;
+
+                // SMTP username (your Gmail email address)
+                $mail->Username = 'qdsanaval@tip.edu.ph';
+
+                // SMTP password (your Gmail password or an app-specific password)
+                $mail->Password = 'ltflobngvxfazgaz';
+
+                
+
+                // Enable TLS encryption
+                $mail->SMTPSecure = PHPMailer::ENCRYPTION_STARTTLS;
+
+                // TCP port to connect to, use 465 for `PHPMailer::ENCRYPTION_SMTPS`
+                $mail->Port = 587;
+
+                
+
+                // Set sender and recipient
+                $mail->setFrom('qdsanaval@tip.edu.ph', 'TheShoeCrew');
+                $mail->addAddress($email, $firstname . ' ' . $lastname);
+
+                // Set email format to HTML
+                $mail->isHTML(true);
+
+                // Generate a verification code
+                $verification_code = substr(number_format(time() * rand(), 0, '', ''), 0, 6);
+
+                $mail->Subject = 'Email Verification';
+                $mail->Body = 'Dear ' . $firstname . ',<br><br>
+                    Thank you for registering on our website. Please use the following verification code to complete your registration: <br><br>
+                    Verification Code: <b>' . $verification_code . '</b><br><br>
+                    Best regards,<br>
+                    Your Website Team';
+
+                // Send the email
+                if ($mail->send()) {
+                    // Email sent successfully
+                    $sql = "INSERT INTO registration (username, email, firstname, lastname, password, role, address, birthday, mobileNo, gender, image, balance, verification_code, email_verified_at)
+            VALUES ('$username', '$email', '$firstname', '$lastname', '$password', '$role', '', '', '', '', 'loginIcon.jpeg', '0', '$verification_code', NULL)";
+    $result = mysqli_query($conn, $sql);
+                    if ($result) {
+                        $_SESSION["firstname"] = $firstname;
+                        $_SESSION["lastname"] = $lastname;
+                        $_SESSION["email"] = $email;
+                        header('Location: aaverification.php');
+                        exit();
+                    } else {
+                        echo "<script>alert('Woops! Something Went Wrong.')</script>";
+                    }
+                } else {
+                    echo "<script>alert('Woops! Email could not be sent. Please try again later.')</script>";
+                }
+            } catch (Exception $e) {
+                    echo "Message could not be sent. Mailer Error: {$mail->ErrorInfo}";
         }
-
     } else {
-        echo "<script>alert('Password Not Matched.')</script>";
+        echo "<script>alert('Woops! Email Already Exists.')</script>";
     }
+} else {
+    echo "<script>alert('Password Not Matched.')</script>";
+}
 }
 
 function getUserByEmail($conn, $email) {

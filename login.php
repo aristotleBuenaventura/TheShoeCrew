@@ -5,63 +5,85 @@ session_start();
 
 error_reporting(0);
 
-
-$result = mysqli_query($conn,"SELECT * FROM registration WHERE email='$email'");
+$result = mysqli_query($conn, "SELECT * FROM registration WHERE email='$email'");
 $resultCheck = mysqli_num_rows($result);
 
 $roleDB = "";
-if($resultCheck > 0) {
-  while($row = mysqli_fetch_assoc($result)) {
-    $emailDB = $row['email'];
-    $roleDB = $row['role'];
-  }
+if ($resultCheck > 0) {
+    while ($row = mysqli_fetch_assoc($result)) {
+        $emailDB = $row['email'];
+        $roleDB = $row['role'];
+    }
 }
 
-    
 if (isset($_SESSION['username'])) {
     header("Location: index.html");
 }
 
 if (isset($_POST['submit'])) {
     session_start();
-    
-    ////////////////////////
+
     $email = $_POST['email'];
     $password = md5($_POST['password']);
-    $user = mysqli_fetch_row($result);
-    $user = $_POST['username'];
-    $result = getUserByEmail($conn, $email, $password);
-    if ($result->num_rows > 0) {
-                $row = mysqli_fetch_row($result);
-                $_SESSION['username'] = $row['username'];
-                $_SESSION['email'] = $_POST['email'];////////////////////////
-                header("Location: admin.php");
-            } else {
-                echo "<script>alert('Woops! Email or Password is Wrong.')</script>";
-                // session_destroy();////////////////////////
-            }
-       
 
+    // Get the user's verification status
+    $verificationStatus = getUserVerificationStatus($conn, $email);
+
+    if ($verificationStatus === 'verified') {
+        // User is verified, proceed with login logic
+        $result = getUserByEmail($conn, $email, $password);
+        if ($result->num_rows > 0) {
+            $row = mysqli_fetch_assoc($result);
+            $_SESSION['username'] = $row['username'];
+            $_SESSION['email'] = $_POST['email'];
+            header("Location: admin.php");
+        } else {
+            echo "<script>alert('Woops! Email or Password is Wrong.')</script>";
+            // session_destroy();
+        }
+    } else if ($verificationStatus === 'not_verified') {
+        echo "<script>alert('Please verify your email before logging in.')</script>";
+    } else {
+        echo "<script>alert('An error occurred while verifying your email. Please try again later.')</script>";
+    }
 }
 
 function getUserByEmail($conn, $email, $password) {
-    $sql = "SELECT * FROM registration WHERE email='$email' AND password= '$password'";
+    $sql = "SELECT * FROM registration WHERE email='$email' AND password='$password'";
     return mysqli_query($conn, $sql);
 }
 
-if (isset($_SESSION['email'])){
-  $email = $_SESSION['email'];
-} else {
-  $email = "";
-}   
-
-if (isset($_GET['registration'])){
-  $registration = $_GET['registration'];
-} else {
-  $registration = "";
+function getUserVerificationStatus($conn, $email) {
+    $sql = "SELECT email_verified_at FROM registration WHERE email='$email'";
+    $result = mysqli_query($conn, $sql);
+    if ($result->num_rows > 0) {
+        $row = mysqli_fetch_assoc($result);
+        if ($row['email_verified_at'] !== NULL) {
+            return 'verified';
+        }
+        // Automatically verify if email_verified_at has a value (timestamp)
+        if (!empty($row['email_verified_at'])) {
+            $updateSql = "UPDATE registration SET email_verified_at = NOW() WHERE email = '$email'";
+            mysqli_query($conn, $updateSql);
+            return 'verified';
+        }
+    }
+    return 'not_verified';
 }
 
+if (isset($_SESSION['email'])) {
+    $email = $_SESSION['email'];
+} else {
+    $email = "";
+}
+
+if (isset($_GET['registration'])) {
+    $registration = $_GET['registration'];
+} else {
+    $registration = "";
+}
 ?>
+
 
 <!DOCTYPE html>
 <html lang="en">
